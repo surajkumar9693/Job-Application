@@ -35,10 +35,6 @@ const isValidValues = function (data) {
 
 //------------------------------- name regex --------------------------------------------//
 
-const isValidUserName = function (value) {
-    return /^[a-z0-9_\.]+$/i.test(value);
-};
-
 const isValidname = function (name) {
     return /^[a-z ,.'-]+$/i.test(name);
 };
@@ -63,10 +59,10 @@ const isValidPhone = function (phone) {
 }
 //------------------------------- Image regex --------------------------------------------//
 
-const isValidImage = function (value) {
-    const r = /\.(gif|jpe?g|tiff?|png|webp|temp)$/
-    return r.test(value)
-}
+const isValidImage = (img) => {
+    const regex = /pdf/i.test(img);
+    return regex;
+  };
 
 const isValidNumber = function (value) {
     if (typeof value === Number && value.trim().length === 0) return false
@@ -75,7 +71,6 @@ const isValidNumber = function (value) {
 }
 
 module.exports = {
-    isValidUserName,
     isValid,
     isValidname,
     isValidPassword,

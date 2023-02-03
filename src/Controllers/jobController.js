@@ -3,7 +3,7 @@ const userModel = require('../Models/UserModel')
 const check = require('../validations/validation.js')
 
 
-//--------------------|| CREATE JOB POSTING ||----------------------
+//--------------------|| CREATE JOB  ||----------------------
 
 const createJob = async function (req, res) {
     try {
@@ -42,7 +42,7 @@ const createJob = async function (req, res) {
     }
 }
 
-//--------------------|| GET JOB APPLICATIONS DETAILS ||----------------------
+//--------------------|| GET JOB ||----------------------
 
 let getJobDetails = async function (req, res) {
     try {
@@ -59,7 +59,7 @@ let getJobDetails = async function (req, res) {
 }
 
 
-//--------------------|| UPDATE JOB POSTING ||----------------------
+//--------------------|| UPDATE JOB ||----------------------
 
 const updateJobDetails = async function (req, res) {
     try {
@@ -87,7 +87,7 @@ const updateJobDetails = async function (req, res) {
 }
 
 
-//--------------------|| Delete JOB POSTING ||----------------------
+//--------------------|| Delete JOB  ||----------------------
 
 const deleteJobPosting = async function (req, res) {
     try {
@@ -112,6 +112,8 @@ const deleteJobPosting = async function (req, res) {
 }
 
 
-//--------------------|| EXPORTING MODULE TO ROUTE.JS  ||----------------------
+
+
+
 
 module.exports = { createJob, getJobDetails, updateJobDetails, deleteJobPosting }

@@ -1,4 +1,5 @@
 const userModel = require('../Models/UserModel.js')
+const { uploadFile } = require('../aws/aws')
 const check = require('../validations/validation.js')
 const bcrypt = require("bcrypt");
 var jwt = require('jsonwebtoken');
@@ -9,13 +10,14 @@ var jwt = require('jsonwebtoken');
 const createUser = async function (req, res) {
     try {
         let userData = req.body
+        let files = req.files
 
-        let { name, mobile, email, password } = userData
+        let { name, mobile, email, password, resume } = userData
 
         if (!check.isValidRequestBody(userData)) return res.status(400).send({ status: false, message: "please input some data" })
 
         if (!name) return res.status(400).send({ status: false, message: "name is mandatory" })
-        if (!check.isValidname(name)) return res.status(400).send({ status: false, message: `name is must in char` })
+        if (!check.isValidUserName(name)) return res.status(400).send({ status: false, message: `name is must in char` })
 
         if (!mobile) return res.status(400).send({ status: false, message: "mobile is mandatory" })
         if (!check.isValidPhone(mobile)) return res.status(400).send({ status: false, message: "please input mobile nuumber" })
@@ -31,6 +33,19 @@ const createUser = async function (req, res) {
         if (!check.isValidPassword(password)) return res.status(400).send({ status: false, message: "please input password nuumber" })
         const encryptedPassword = await bcrypt.hash(password, 10)
         userData.password = encryptedPassword
+
+        let profile = files[0].originalname;
+
+        if (check.isValidImage(resume)) {
+            return res.status(400).send({ status: false, message: " Please provide only image  of format only-> pdf" })
+        }
+
+        if (!(files && files.length > 0)) {
+            return res.status(400).send({ status: false, message: "Please Provide The Profile Image" });
+        }
+
+        const uploadedProfileImage = await uploadFile(files[0])
+        userData.resume = uploadedProfileImage
 
         const createuser = await userModel.create(userData);
         return res.status(201).send({ status: true, message: "User created successfully", data: createuser });
@@ -76,5 +91,56 @@ const loginUser = async function (req, res) {
 }
 
 
+//--------------------|| UPDATE USER  ||----------------------
 
-module.exports = { createUser, loginUser }
+const updateUserDetails = async function (req, res) {
+    try {
+        let userId = req.params.UserId
+        let data = req.body
+
+        if (!check.isValidRequestBody(data)) return res.status(400).send({ status: false, message: "please input data" })
+        if (!userId) return res.status(400).send({ status: false, message: "please provide userId in params" })
+        if (!check.isValidObjectId(userId)) return res.status(400).send({ status: false, msg: "please enter a valid userId" })
+        let findApplicant = await userModel.findOne({ userId: userId, isDeleted: false })
+        if (!findApplicant) return res.status(404).send({ status: false, msg: "Applicantion doesn't exists" })
+
+
+        let updatedData = await userModel.findOneAndUpdate({
+            userId: userId
+        },
+            { $set: { ...data } },
+            { new: true });
+        return res.status(200).send({ status: true, message: "sucessfully updated", updatedData });
+
+    } catch (err) {
+        return res.status(500).send({ status: false, message: err.message })
+    }
+}
+
+
+//--------------------|| DELETE USER ||----------------------
+
+const deleteuser = async function (req, res) {
+    try {
+        let userId = req.params.UserId
+
+        if (!userId) return res.status(400).send({ status: false, message: "please provide a UserId in params" })
+        if (!check.isValidObjectId(userId)) return res.status(400).send({ status: false, msg: "please enter a valid UserId" })
+
+        let finduser = await userModel.findOne({ userId: userId, isDeleted: false })
+        if (!finduser) return res.status(404).send({ status: false, message: "user is already deleted" })
+
+        let deleteuser = await userModel.findOneAndUpdate({
+            userId: userId
+        },
+            { $set: { isDeleted: true } },
+            { new: true });
+        return res.status(200).send({ status: true, message: "user sucessfully deleted", deleteuser });
+
+    } catch (err) {
+        return res.status(500).send({ status: false, message: err.message })
+    }
+}
+
+
+module.exports = { createUser, loginUser, deleteuser, updateUserDetails }

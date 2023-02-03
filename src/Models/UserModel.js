@@ -18,14 +18,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    resume: {
-      type: String,
-      required: true,
-    },
-    isDeleted: {
-      type: Boolean,
-      default: false,
-    },
+    
   },
   { timestamps: true }
 );
