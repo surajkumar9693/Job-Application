@@ -15,21 +15,17 @@ const jobSchema = new mongoose.Schema({
         require: true
     },
     skills:{
-        type: String,
+        type: [String],
         require: true
     },
     experience:{
         type: Number,
         require: true
     },
-    userId:{
-        type: ObjectId, 
-        ref: 'user',
-        require: true
-    },
     isDeleted:{
         type: Boolean,
-        require: true
+        require: true,
+        default:false
     }
 
 },{timestamps: true})

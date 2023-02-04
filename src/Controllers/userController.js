@@ -63,8 +63,8 @@ const loginUser = async function (req, res) {
         if (!passwordCheck) return res.status(400).send({ status: false, message: "invalid password" });
 
         let token = jwt.sign({
-            userId: user._id.toString()
-        }, "suraj-job",
+            userId: user._id.toString()},
+             "suraj-job",
             {
                 expiresIn: "12h"
             });

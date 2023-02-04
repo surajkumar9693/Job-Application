@@ -59,7 +59,7 @@ const isValidPhone = function (phone) {
 }
 //------------------------------- Image regex --------------------------------------------//
 
-const isValidImage = (img) => {
+const isValidResume = (img) => {
     const regex = /pdf/i.test(img);
     return regex;
   };
@@ -78,7 +78,7 @@ module.exports = {
     isValidPhone,
     isValidRequestBody,
     isValidObjectId,
-    isValidImage,
+    isValidResume,
     isValidValues,
     isValidNumber
 }

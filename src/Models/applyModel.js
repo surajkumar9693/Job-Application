@@ -7,18 +7,19 @@ const applySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    mobile: {
-      type: Number,
-      required: true,
-    },
     email: {
       type: String,
       required: true,
     },
-    jobId:{
-        type: ObjectId, 
-        ref: 'user',
-        require: true
+    jobId: {
+      type: ObjectId,
+      ref: 'job',
+      require: true
+    },
+    userId: {
+      type: ObjectId,
+      ref: 'user',
+      require: true
     },
     resume: {
       type: String,
